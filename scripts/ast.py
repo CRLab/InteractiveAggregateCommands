@@ -22,49 +22,57 @@ class Record(Task):
 		self.task_list = task_list
 
 class DefineLocation(Task):
-	def __init__(self):
-		pass
+	def __init__(self, location_name):
+		self.location_name = location_name
 
 class AdjustBy(Task):
-	def __init__(self):
-		pass
+	def __init__(self, pose_task):
+		self.pose_task = pose_task
 
 class DefinePose(Task):
-	def __init__(self):
-		pass
+	def __init__(self, pose_name):
+		self.pose_name = pose_name
 
 class Direction(Task):
-	def __init__(self):
-		pass
+	UP = 0
+	DOWN = 1
+	LEFT = 2
+	RIGHT = 3
+	BACKWARD = 4
+	FORWARD = 5
+	def __init__(self, direction):
+		self.direction = direction
 
 class MoveBy(Task):
-	def __init__(self):
-		pass
+	def __init__(self, direction, meters):
+		self.direction = direction
+		self.meters = meters
 
 class GoTo(Task):
-	def __init__(self):
-		pass
+	def __init__(self, location_name):
+		self.location_name = location_name
 
 class FollowMe(Task):
-	def __init__(self):
-		pass
+	def __init__(self, seconds=0):
+		self.seconds = seconds
 
 class GraspObject(Task):
-	def __init__(self):
-		pass
+	def __init__(self, object_name):
+		self.object_name = object_name
 
 class PlaceObject(Task):
-	def __init__(self):
-		pass
+	def __init__(self, object_name):
+		self.object_name = object_name
 
 class AskForObject(Task):
-	def __init__(self):
-		pass
+	def __init__(self, object_name, reference_name):
+		self.object_name = object_name
+		self.reference_name = reference_name
 
 class EnactPose(Task):
-	def __init__(self):
-		pass
+	def __init__(self, pose_name):
+		self.pose_name = pose_name
 
 class MoveHand(Task):
-	def __init__(self):
-		pass
+	def __init__(self, location_name):
+		self.location_name = location_name
