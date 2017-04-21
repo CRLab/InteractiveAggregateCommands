@@ -9,9 +9,24 @@ import parser
 
 tasks = {}
 objects = {}
+locations = { "home": (0,0,0) }
 
 def get_current_object():
     pass
+
+#Give me the current location of the end effector
+def get_current_location():
+    #subscriber to 'robot_info'
+    #return msg(PoseStamped)
+    pass
+
+#Go to the specified location
+def goto_location(location):
+    #pass a posestamped into go_to function to move the robot
+
+    pass
+
+def get_current_pose()
 
 def interpret_task(current_task):
     if isinstance(current_Task, Recognize):
