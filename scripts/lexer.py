@@ -149,4 +149,7 @@ m.build()           # Build the lexer
 
 if __name__ == '__main__':
     # Build the lexer and try it out
+    print("TEST 1")
     m.test("recognize object as id")     # Test it
+    print("TEST 2")
+    m.test("record enact pose hello as hello_pose")

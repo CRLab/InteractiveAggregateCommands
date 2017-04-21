@@ -33,7 +33,7 @@ def p_command_execute(p):
     p[0] = Execute(p[2])
 
 def p_command_record(p):
-    'command : RECORD task AS ID'
+    'command : RECORD task_list AS ID'
     p[0] = Record(p[2], p[4])
 
 def p_command_define_location(p):
@@ -130,8 +130,8 @@ def p_task_move_hand_to_id(p):
     p[0] = MoveHand(p[4])
 
 def p_task_list(p):
-    'task_list : empty'
-    p[0] = TaskList()
+    'task_list : task'
+    p[0] = TaskList(p[1])
 
 def p_task_list2(p):
     'task_list : task_list AND THEN task'
