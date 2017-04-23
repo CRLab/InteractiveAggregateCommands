@@ -22,7 +22,13 @@ class Paraphrase_detector:
 		#self.encoder = skipthoughts.Encoder(self.model)
 		self.encoder = skipthought_encoder
 		self.active_sentences = []
+		self.start_words_to_skip = ['move by', 'follow me for']
 
+
+	# Let the paraphrase detector know what sentences are in the vocabulary. Add one of 
+	# 3 kinds of sentences: pose, object, or place. new_token should be whatever new ID of that kind should be added
+	# for example: add_sentence('pose', 'home') would add a new pose called home that could be called by any 
+	# of the pose sentences in self.pose_sentences defined above
 	def add_sentence(self, sentence_type, new_token):
 		if sentence_type == 'pose':
 			for sentence in self.pose_sentences:
@@ -46,7 +52,8 @@ class Paraphrase_detector:
 
 
 
-
+	#For internal use only. 
+	#For paraphrase detection, use by check_task_list_for_paraphrases
 	def get_closest_sentence(self, input_sentence, distance_metric="cosine"):
 		sentence_distances = []
 		input_sentence_vector = self.encoder.encode([input_sentence])
@@ -60,6 +67,7 @@ class Paraphrase_detector:
 		return sentence_distances[0][1][0]
 
 
+	# use this to detect paraphrases
 	def check_task_list_for_paraphrases(self, input_string):
 		strings = input_string.split(" and then ")
 		number_of_and_thens = len(strings) - 1
@@ -67,13 +75,21 @@ class Paraphrase_detector:
 		string_to_return = ""
 
 		for sentence in strings: 
-			if sentence.startswith("move by"):
-				if number_of_and_thens > 0:
-					string_to_return = string_to_return + sentence + " and then "
-					number_of_and_thens -= 1
-				else: 
-					string_to_return = string_to_return + sentence
-			else: 
+			already_done = False
+
+			# check all starts_with_words_to_skip before looking for paraphrase
+			for skip_words in self.start_words_to_skip:
+				if sentence.startswith(skip_words):
+					if number_of_and_thens > 0:
+						string_to_return = string_to_return + sentence + " and then "
+						number_of_and_thens -= 1
+						already_done = True
+					else: 
+						string_to_return = string_to_return + sentence
+						already_done = True
+
+
+			if not already_done: 
 				if number_of_and_thens > 0:
 					parsable_sentence = self.get_closest_sentence(sentence)
 					string_to_return = string_to_return + parsable_sentence + " and then "
@@ -85,11 +101,16 @@ class Paraphrase_detector:
 
 		return string_to_return
 
+	#Add a new start word to skip when doing paraphrase detection
+	def add_start_word_to_skip(self, new_skip_word):
+		self.start_words_to_skip.append(new_skip_word)
 
 
-
+	
 	def get_active_sentences(self):
 		return self.active_sentences
+
+
 
 	def instantiate_test_env(self):
 		self.add_sentence('object', 'mug')
