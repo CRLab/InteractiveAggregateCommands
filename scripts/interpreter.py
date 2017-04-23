@@ -5,11 +5,14 @@
 # @Last Modified time: 2017-04-21 03:39:12
 
 from ast import *
-import parser
+from command_parser import command_parser
+from task_parser import task_parser
+import fuzzy_parser
 
 tasks = {}
 objects = {}
 locations = { "home": (0,0,0) }
+robots = ["mico", "fetch"]
 
 def get_current_object():
     pass
@@ -26,7 +29,8 @@ def goto_location(location):
 
     pass
 
-def get_current_pose()
+def get_current_pose():
+    pass
 
 def interpret_task(current_task):
     if isinstance(current_Task, Recognize):
@@ -62,8 +66,29 @@ def interpret_task(current_task):
     elif isinstance(current_task, Task_list):
         pass
 
+def parse_unprocessed(s):
+    if isinstance(s, UnprocessedExecute):
+        s.task_list = fuzzy_parser.parse(s.task_list)
+        return s.pretty_print()
+
+    elif isinstance(s, UnprocessedRecord):
+        s.task_list = fuzzy_parser.parse(s.task_list)
+        return s.pretty_print()
+
+    else:
+        return ""
+
+def parse_command(s):
+    initial_parse = command_parser.parse(s)
+    if initial_parse is not None:
+        initial_parse = parse_unprocessed(initial_parse)
+        return task_parser.parse(initial_parse)
+    else:
+        return task_parser.parse(s)
+
 if __name__ == "main":
     while True:
+
         try:
             s = raw_input('aggregate > ')
         except EOFError:
