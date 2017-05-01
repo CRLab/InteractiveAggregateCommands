@@ -1,0 +1,33 @@
+{
+  "intents": [
+    {
+      "intent": "RecordCommandIntent",
+      "slots": [
+        {
+          "name": "CommandId",
+          "type": "LITERAL"
+        },
+        {
+          "name": "TaskList",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "ReturnCommandintent",
+      "slots": [
+        {
+          "name": "CommandId",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
+

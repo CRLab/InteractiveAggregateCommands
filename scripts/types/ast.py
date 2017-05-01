@@ -72,6 +72,36 @@ class DefinePose(Command):
 	def pretty_print(self):
 		return "you are in pose " + self.pose_name
 
+class Pause(Command):
+	def __init__(self):
+		pass
+
+	def __str__(self):
+		return "Pause"
+
+	def pretty_print(self):
+		return "pause"
+
+class Stop(Command):
+	def __init__(self):
+		pass
+
+	def __str__(self):
+		return "Stop"
+
+	def pretty_print(self):
+		return "stop"
+
+class Quit(Command):
+	def __init__(self):
+		pass
+
+	def __str__(self):
+		return "Quit"
+
+	def pretty_print(self):
+		return "quit"
+
 class Direction():
 	UP = 0
 	DOWN = 1
@@ -219,25 +249,6 @@ class TaskList():
 			output += task.pretty_print() + " and then "
 		return output + self.tasks[-1].pretty_print()
 
-class Pause(Command):
-	def __init__(self):
-		pass
-
-	def __str__(self):
-		return "Pause{}"
-
-	def pretty_print(self):
-		return "pause"
-
-class Stop(Command):
-	def __init__(self):
-		pass
-
-	def __str__(self):
-		return "Stop{}"
-
-	def pretty_print(self):
-		return "stop"
 
 class RecordedTask(Task):
 	def __init__(self, task_name):

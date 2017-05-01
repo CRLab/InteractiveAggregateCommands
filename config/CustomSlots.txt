@@ -1,0 +1,7 @@
+DIRECTION:
+	up
+	down
+	left
+	right
+	backward
+	forward

@@ -1,0 +1,10 @@
+RecognizeObjectIntent recognize object as LITERAL
+ExecuteIntent execute LITERAL
+RecordCommandIntent record LITERAL as LITERAL
+ReturnCommandIntent what is command {CommandId}
+AdjustCourseIntent adjust course by moving {Direction} by NUMBER
+DefinePoseIntent you are in pose LITERAL
+PauseIntent pause
+StopIntent stop
+SwitchRobotIntent switch to robot LITERAL
+QuitIntent quit

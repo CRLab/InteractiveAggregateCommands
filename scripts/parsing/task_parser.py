@@ -145,50 +145,6 @@ class Lexer(object):
              print(tok)
 
 tokens = Lexer.tokens
-############################## COMMANDS ##############################
-#command : 
-    #RECOGNIZE AS ID
-    #EXECUTE <task list>
-    #RECORD <task list> as ID
-    #YOU ARE IN LOCATION ID
-    #ADJUST COURSE BY <pose_task>
-    #YOU ARE IN POSE ID
-
-def p_command_recognize(p):
-    'command : RECOGNIZE OBJECT AS ID'
-    p[0] = Recognize(p[4])
-
-def p_command_execute(p):
-    'command : EXECUTE task_list'
-    p[0] = Execute(p[2])
-
-def p_command_record(p):
-    'command : RECORD task_list AS ID'
-    p[0] = Record(p[2], p[4])
-
-def p_command_define_location(p):
-    'command : YOU ARE IN LOCATION ID'
-    p[0] = DefineLocation(p[4])
-
-def p_command_adjust_course(p):
-    'command : ADJUST COURSE BY pose_task'
-    p[0] = AdjustBy(p[4])
-
-def p_command_define_pose(p):
-    'command : YOU ARE IN POSE ID'
-    p[0] = DefinePose(p[4])
-
-def p_command_pause(p):
-    'command : PAUSE'
-    p[0] = Pause()
-
-def p_command_stop(p):
-    'command : STOP'
-    p[0] = Stop()
-
-def p_command_switch_robot(p):
-    'command : SWITCH TO ROBOT ID'
-    p[0] = SwitchRobot(p[3])
 
 ############################## DIRECTIONS ##############################
 #direction :
@@ -296,7 +252,7 @@ def p_error(p):
     print("Syntax error in input!")
 
 def p_top_level(p):
-    'start : command'
+    'start : task_list'
     p[0] = p[1]
 
 # Build the parser

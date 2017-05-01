@@ -1,0 +1,2 @@
+class SucessfullyWroteObject(object):
+    pass
