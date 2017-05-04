@@ -194,7 +194,9 @@ class Lexer(object):
     def t_NAMED(self, t):
         r'named'; return t
 
-    t_ID = r'[a-zA-Z][a-zA-Z\s]*[a-zA-Z]'
+    def t_ID(self, t):
+        r"""[a-zA-Z][a-zA-Z\s]*[a-zA-Z]"""
+        return t
 
     # A regular expression rule with some action code
     # Note addition of self parameter since we're in a class
@@ -362,4 +364,5 @@ def p_top_level(p):
 tokens = Lexer.tokens
 lexer_instance = Lexer()
 lexer_instance.build()  # Build the lexer
+print(lexer_instance.test("shaving task and then shaving task"))
 task_parser = yacc.yacc(start='start')

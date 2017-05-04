@@ -122,7 +122,8 @@ class Paraphraser:
                 self.logger.error("Unable to read from server")
                 task_list = phrase.task_list
 
-            parsed_list = self.task_parser.parse(task_list)
+            new_list = task_list.split(" and then ")
+            parsed_list = map(self.task_parser.parse, new_list)
             if parsed_list is None:
                 return Execute([]), UnableToParseTaskListMsg(task_list)
 
@@ -137,7 +138,8 @@ class Paraphraser:
                 self.logger.error("Unable to read from server")
                 task_list = phrase.task_list
 
-            parsed_list = self.task_parser.parse(task_list)
+            new_list = task_list.split(" and then ")
+            parsed_list = map(self.task_parser.parse, new_list)
             if parsed_list is None:
                 return Record([], phrase.command_id), UnableToParseTaskListMsg(task_list)
 
