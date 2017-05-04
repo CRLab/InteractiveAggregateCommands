@@ -98,9 +98,13 @@ class CommandState:
 class Paraphraser:
     def __init__(self, url):
         self.url = url
+        self.headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        try:
+            print(requests.post(url + "/start_test_env"))
+        except requests.exceptions.RequestException as e:  # This is the correct syntax
+            pass
 
     def paraphraseCommand(self, phrase):
-        #return requests.post(self.url + "/paraphrase", data=json.dumps({'data': phrase)).text
         if isinstance(phrase, AlexaAdjustCourse):
             return AdjustBy(MoveBy(phrase.direction, phrase.meters))
 
@@ -108,13 +112,21 @@ class Paraphraser:
             return Recognize(phrase.object_name)
 
         elif isinstance(phrase, AlexaExecute):
-            #task_list = requests.post(self.url + "/paraphrase", data=json.dumps({'data': phrase.task_list)).text
-            task_list = phrase.task_list
+            try:
+                task_list = requests.post(self.url + "/paraphrase_this",
+                                          data=json.dumps({'data': phrase.task_list}),
+                                          headers=self.headers).text
+            except requests.exceptions.RequestException as e:  # This is the correct syntax
+                task_list = phrase.task_list
             return Execute(task_list)
 
         elif isinstance(phrase, AlexaRecordCommand):
-            # task_list = requests.post(self.url + "/paraphrase", data=json.dumps({'data': phrase.task_list)).text
-            task_list = phrase.task_list
+            try:
+                task_list = requests.post(self.url + "/paraphrase_this",
+                                          data=json.dumps({'data': phrase.task_list}),
+                                          headers=self.headers).text
+            except requests.exceptions.RequestException as e:  # This is the correct syntax
+                task_list = phrase.task_list
             return Record(task_list, phrase.command_id)
 
         elif isinstance(phrase, AlexaReturnCommand):
@@ -285,7 +297,7 @@ if __name__ == '__main__':
     command_passer = PassCommand("out.txt", "in.txt")
     robot_interface = GenericInterface()
     command_state = CommandState()
-    paraphrase_detector = Paraphraser('localhost:8080')
+    paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:80')
 
     command_parser = CommandParserClient(command_passer=command_passer,
                                          robot_interface=robot_interface,
