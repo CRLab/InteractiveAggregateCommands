@@ -1,7 +1,42 @@
 DIRECTION:
-	up
-	down
-	left
-	right
-	backward
-	forward
+up
+down
+left
+right
+backward
+forward
+
+ROBOT:
+fetch
+mico
+pr2
+staubli
+baxter
+
+POSE:
+home
+desk
+ready
+
+COMMANDID:
+pick and place
+up and down
+clean desk
+
+OBJECTNAME:
+apple
+mug
+tide
+baseball
+block
+all bottle
+cylinder
+
+TASKLIST:
+follow me
+pick up apple
+grasp apple
+pick up tide bottle
+pick up gilette bottle
+place apple
+place object apple

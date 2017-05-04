@@ -144,7 +144,6 @@ class Lexer(object):
                  break
              print(tok)
 
-tokens = Lexer.tokens
 
 ############################## DIRECTIONS ##############################
 #direction :
@@ -256,6 +255,7 @@ def p_top_level(p):
     p[0] = p[1]
 
 # Build the parser
+tokens = Lexer.tokens
 lexer_instance = Lexer()
 lexer_instance.build()           # Build the lexer
 task_parser = yacc.yacc(start='start', lexer=lexer_instance.lexer)

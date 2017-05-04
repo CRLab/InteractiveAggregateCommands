@@ -1,10 +1,10 @@
-RecognizeObjectIntent recognize object as LITERAL
-ExecuteIntent execute LITERAL
-RecordCommandIntent record LITERAL as LITERAL
+RecognizeObjectIntent recognize object as {ObjectName}
+ExecuteIntent execute {TaskList}
+RecordCommandIntent record {TaskList} as {CommandId}
 ReturnCommandIntent what is command {CommandId}
-AdjustCourseIntent adjust course by moving {Direction} by NUMBER
-DefinePoseIntent you are in pose LITERAL
+AdjustCourseIntent adjust course by moving {Direction} by {Integer} point {Decimal} meters
+DefinePoseIntent you are in pose {Pose}
+SwitchRobotIntent switch to robot {Robot}
 PauseIntent pause
 StopIntent stop
-SwitchRobotIntent switch to robot LITERAL
 QuitIntent quit

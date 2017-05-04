@@ -1,33 +1,330 @@
 {
   "intents": [
     {
-      "intent": "RecordCommandIntent",
+      "name": "AdjustCourseIntent",
+      "samples": [
+        "adjust course by moving {Direction} by {Integer} point {Decimal} meters"
+      ],
+      "slots": [
+        {
+          "name": "Direction",
+          "type": "DIRECTION",
+          "samples": []
+        },
+        {
+          "name": "Integer",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        },
+        {
+          "name": "Decimal",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+    {
+      "name": "DefinePoseIntent",
+      "samples": [
+        "you are in pose {Pose}"
+      ],
+      "slots": [
+        {
+          "name": "Pose",
+          "type": "POSE",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "ExecuteIntent",
+      "samples": [
+        "execute {TaskList}"
+      ],
+      "slots": [
+        {
+          "name": "TaskList",
+          "type": "TASKLIST",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "PauseIntent",
+      "samples": [
+        "pause"
+      ],
+      "slots": []
+    },
+    {
+      "name": "QuitIntent",
+      "samples": [
+        "quit"
+      ],
+      "slots": []
+    },
+    {
+      "name": "RecognizeObjectIntent",
+      "samples": [
+        "recognize object as {ObjectName}"
+      ],
+      "slots": [
+        {
+          "name": "ObjectName",
+          "type": "OBJECTNAME",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "RecordCommandIntent",
+      "samples": [
+        "record {TaskList} as {CommandId}"
+      ],
       "slots": [
         {
           "name": "CommandId",
-          "type": "LITERAL"
+          "type": "COMMANDID",
+          "samples": []
         },
         {
           "name": "TaskList",
-          "type": "LITERAL"
+          "type": "TASKLIST",
+          "samples": []
         }
       ]
     },
     {
-      "intent": "ReturnCommandintent",
+      "name": "ReturnCommandIntent",
+      "samples": [
+        "what is command {CommandId}"
+      ],
       "slots": [
         {
           "name": "CommandId",
-          "type": "LITERAL"
+          "type": "COMMANDID",
+          "samples": []
         }
       ]
     },
     {
-      "intent": "AMAZON.HelpIntent"
+      "name": "StopIntent",
+      "samples": [
+        "stop"
+      ],
+      "slots": []
     },
     {
-      "intent": "AMAZON.CancelIntent"
+      "name": "SwitchRobotIntent",
+      "samples": [
+        "switch to robot {Robot}"
+      ],
+      "slots": [
+        {
+          "name": "Robot",
+          "type": "ROBOT",
+          "samples": []
+        }
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "COMMANDID",
+      "values": [
+        {
+          "name": {
+            "value": "pick and place"
+          }
+        },
+        {
+          "name": {
+            "value": "up and down"
+          }
+        },
+        {
+          "name": {
+            "value": "clean desk"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DIRECTION",
+      "values": [
+        {
+          "name": {
+            "value": "up"
+          }
+        },
+        {
+          "name": {
+            "value": "down"
+          }
+        },
+        {
+          "name": {
+            "value": "left"
+          }
+        },
+        {
+          "name": {
+            "value": "right"
+          }
+        },
+        {
+          "name": {
+            "value": "backward"
+          }
+        },
+        {
+          "name": {
+            "value": "forward"
+          }
+        }
+      ]
+    },
+    {
+      "name": "OBJECTNAME",
+      "values": [
+        {
+          "name": {
+            "value": "apple"
+          }
+        },
+        {
+          "name": {
+            "value": "mug"
+          }
+        },
+        {
+          "name": {
+            "value": "tide"
+          }
+        },
+        {
+          "name": {
+            "value": "baseball"
+          }
+        },
+        {
+          "name": {
+            "value": "block"
+          }
+        },
+        {
+          "name": {
+            "value": "all bottle"
+          }
+        },
+        {
+          "name": {
+            "value": "cylinder"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POSE",
+      "values": [
+        {
+          "name": {
+            "value": "home"
+          }
+        },
+        {
+          "name": {
+            "value": "desk"
+          }
+        },
+        {
+          "name": {
+            "value": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ROBOT",
+      "values": [
+        {
+          "name": {
+            "value": "fetch"
+          }
+        },
+        {
+          "name": {
+            "value": "mico"
+          }
+        },
+        {
+          "name": {
+            "value": "pr2"
+          }
+        },
+        {
+          "name": {
+            "value": "staubli"
+          }
+        },
+        {
+          "name": {
+            "value": "baxter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TASKLIST",
+      "values": [
+        {
+          "name": {
+            "value": "follow me"
+          }
+        },
+        {
+          "name": {
+            "value": "pick up apple"
+          }
+        },
+        {
+          "name": {
+            "value": "grasp apple"
+          }
+        },
+        {
+          "name": {
+            "value": "pick up tide bottle"
+          }
+        },
+        {
+          "name": {
+            "value": "pick up gilette bottle"
+          }
+        },
+        {
+          "name": {
+            "value": "place apple"
+          }
+        },
+        {
+          "name": {
+            "value": "place object apple"
+          }
+        }
+      ]
     }
   ]
 }
-
