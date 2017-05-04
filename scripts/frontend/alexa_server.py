@@ -6,6 +6,10 @@ from scripts.types.alexa_phrases import AlexaAdjustCourse, AlexaRecognizeObject,
 import pickle
 import os
 import time
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -32,6 +36,8 @@ def read_from_ros():
 @ask.intent('RecognizeObjectIntent', mapping={'ObjectName': 'object_name'})
 def recognize_object(object_name):
     msg = AlexaRecognizeObject(object_name)
+    logger.info("RecognizeObjectIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -41,6 +47,8 @@ def recognize_object(object_name):
 @ask.intent('ExecuteIntent', mapping={'TaskList': 'task_list'})
 def execute(task_list):
     msg = AlexaExecute(task_list)
+    logger.info("ExecuteIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -50,6 +58,8 @@ def execute(task_list):
 @ask.intent('RecordCommandIntent', mapping={'TaskList': 'task_list', 'CommandId': 'command_id'})
 def record_command(task_list, command_id):
     msg = AlexaRecordCommand(task_list, command_id)
+    logger.info("RecordCommandIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -59,6 +69,8 @@ def record_command(task_list, command_id):
 @ask.intent('ReturnCommandIntent', mapping={'CommandId': 'command_id'})
 def return_command(command_id):
     msg = AlexaReturnCommand(command_id)
+    logger.info("ReturnCommandIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -71,6 +83,8 @@ def adjust_course(direction, integer, decimal):
     direction = Direction(direction)
 
     msg = AlexaAdjustCourse(direction, meters)
+    logger.info("AdjustCourseIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -80,6 +94,8 @@ def adjust_course(direction, integer, decimal):
 @ask.intent('DefinePoseIntent', mapping={'Pose': 'pose'})
 def define_pose(pose):
     msg = AlexaDefinePose(pose)
+    logger.info("DefinePoseIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -89,6 +105,8 @@ def define_pose(pose):
 @ask.intent('SwitchRobotIntent', mapping={'Robot': 'robot'})
 def switch_robot(robot):
     msg = AlexaSwitchRobot(robot)
+    logger.info("SwitchRobotIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -98,6 +116,8 @@ def switch_robot(robot):
 @ask.intent('PauseIntent')
 def pause():
     msg = AlexaPause()
+    logger.info("PauseIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -107,6 +127,8 @@ def pause():
 @ask.intent('StopIntent')
 def stop():
     msg = AlexaStop()
+    logger.info("StopIntent: " + str(msg))
+
     transfer_to_ros(msg)
     response = read_from_ros()
 
@@ -115,6 +137,8 @@ def stop():
 
 @ask.intent('QuitIntent')
 def alexa_quit():
+    logger.info("QuitIntent")
+
     msg = AlexaQuit()
     transfer_to_ros(msg)
     response = read_from_ros()
@@ -124,12 +148,15 @@ def alexa_quit():
 
 @ask.intent('AMAZON.HelpIntent')
 def help():
+    logger.info("HelpIntent")
+
     help_text = render_template('help_text')
     return statement(help_text)
 
 
 @ask.intent('AMAZON.CancelIntent')
 def cancel():
+    logger.info("Cancel intent")
     bye_text = render_template('bye')
     return statement(bye_text)
 

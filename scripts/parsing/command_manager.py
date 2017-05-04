@@ -34,10 +34,15 @@ class PassCommand:
         if time_waited >= 5:
             return None
 
-        return pickle.load(open(self.commandsInFilename, "rb"))
+        obj = pickle.load(open(self.commandsInFilename, "rb"))
+        self.removeMessage()
+        return obj
 
     def write(self, message):
         pickle.dump(message, open(self.infoOutFilename, "wb"))
+
+    def removeMessage(self):
+        os.remove(self.commandsInFilename)
 
 
 class CommandState:
@@ -195,6 +200,7 @@ class CommandParserClient:
         command = self.commandPasser.read()
         if command is None:
             self.logger.error("Was unable to read command from web server. Trying again...")
+            self.commandPasser.removeMessage()
             return
 
         self.logger.info("Received command {}".format(command))
