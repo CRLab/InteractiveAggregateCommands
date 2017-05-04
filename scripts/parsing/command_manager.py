@@ -5,6 +5,7 @@ import pickle
 import time
 import requests
 import json
+import logging
 
 from scripts.interfaces.fetch_interface import FetchInterface, GenericInterface
 from scripts.parsing.task_parser import task_parser
@@ -25,8 +26,13 @@ class PassCommand:
         self.infoOutFilename = infoOutFilename
 
     def read(self):
-        while not os.path.isfile(self.commandsInFilename):
+        time_waited = 0
+        while not os.path.isfile(self.commandsInFilename) and time_waited < 5:
             time.sleep(0.1)
+            time_waited += 0.1
+
+        if time_waited >= 5:
+            return None
 
         return pickle.load(open(self.commandsInFilename, "rb"))
 
@@ -128,38 +134,49 @@ class CommandParserClient:
         self.commandState = command_state
         self.paraphraseDetector = paraphrase_detector
         self.taskParser = task_parser
+        self.logger = logging.getLogger(__name__)
 
     def interpretTask(self, task):
+        self.logger.info("Intrepreting task {}".format(task))
         if isinstance(task, GoTo):
+            self.logger.info("Handling task as GoTo")
             location = self.commandState.getLocation(task.location_name)
             result = self.robotInterface.moveTo(location)
             print(result)
             return result
 
         elif isinstance(task, MoveBy):
+            self.logger.info("Handling task as MoveBy")
             result = self.robotInterface.cartesianTransform(task.direction, task.meters)
             print(result)
             return result
 
         elif isinstance(task, FollowMe):
+            self.logger.info("Handling task as FollowMe")
             self.robotInterface.followMe()
 
         elif isinstance(task, GraspObject):
+            self.logger.info("Handling task as GraspObject")
             self.robotInterface.graspObject(self.commandState.getObject(task.object_name))
 
         elif isinstance(task, PlaceObject):
+            self.logger.info("Handling task as PlaceObject")
             self.robotInterface.placeObject(self.commandState.getObject(task.object_name))
 
         elif isinstance(task, AskForObject):
+            self.logger.info("Handling task as AskForObject")
             self.robotInterface.askForObject()
 
         elif isinstance(task, EnactPose):
+            self.logger.info("Handling task as EnactPose")
             self.robotInterface.enactPose(self.commandState.getPose(task.pose_name))
 
         elif isinstance(task, MoveHand):
+            self.logger.info("Handling task as MoveHand")
             pass
 
         elif isinstance(task, RecordedTask):
+            self.logger.info("Handling task as RecordedTask")
             task_list = self.commandState.getCommand(task.task_name)
             self.interpretTaskList(task_list)
 
@@ -174,8 +191,15 @@ class CommandParserClient:
         return SuccessfullyExecutedTaskListMsg()
 
     def interpretCommand(self):
+        self.logger.info("Interpreting command")
         command = self.commandPasser.read()
+        if command is None:
+            self.logger.error("Was unable to read command from web server. Trying again...")
+            return
+
+        self.logger.info("Received command {}".format(command))
         command = self.paraphraseDetector.paraphraseCommand(command)
+        self.logger.info("Paraphrased command {}".format(command))
 
         if isinstance(command, Recognize):
             self.robotInterface.recognize_object()
@@ -226,6 +250,8 @@ class CommandParserClient:
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+
     command_passer = PassCommand("in.txt", "out.txt")
     robot_interface = GenericInterface()
     command_state = CommandState()
