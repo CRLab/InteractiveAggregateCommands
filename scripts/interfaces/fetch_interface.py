@@ -1,6 +1,5 @@
 import rospy
-from rospy import std_msgs
-
+import std_msgs
 from scripts.interfaces.generic_interface import GenericInterface
 
 
@@ -15,7 +14,7 @@ class FetchInterface(GenericInterface):
         self.navigationPublisher = rospy.Publisher('/navigation', std_msgs.msg.Empty, queue_size=10)
         self.cartesianPublisher = rospy.Publisher('/cartesian', std_msgs.msg.Empty, queue_size=10)
         self.playBackPublisher = rospy.Publisher('/play_back', std_msgs.msg.Empty, queue_size=10)
-        self.runRecognitionPublisher = rospy.Publisher('/run_recognition', std_msgs.msg.Empty, queue_size=10)
+        self.runsRecognitionPublisher = rospy.Publisher('/run_recognition', std_msgs.msg.Empty, queue_size=10)
 
         self.name = "Fetch"
 
