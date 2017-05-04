@@ -14,10 +14,10 @@ from scripts.types.alexa_phrases import AlexaAdjustCourse, AlexaRecognizeObject,
     AlexaReturnCommand, AlexaDefinePose, AlexaSwitchRobot, AlexaPause, AlexaStop, AlexaQuit
 from scripts.types.ast import Recognize, SwitchRobot, Execute, DefineLocation, AdjustBy, DefinePose, Pause, Stop, Quit, \
     ReturnCommand, MoveBy, Record, GoTo, FollowMe, GraspObject, PlaceObject, AskForObject, EnactPose, MoveHand, \
-    RecordedTask
+    RecordedTask, TaskNotFound
 from scripts.types.messages import SucessfullyWroteObjectMsg, SuccessfullyExecutedTaskListMsg, UnableToParseTaskListMsg, \
     NotYetImplementedMsg, ExecutingTasks, RecordedCommandSuccessfullyMsg, DefineLocationSuccessMsg, ReturnCommandMsg, \
-    AdjustByResultMsg, DefinePoseSuccessMsg, QuittingMsg
+    AdjustByResultMsg, DefinePoseSuccessMsg, QuittingMsg, SuccessfullyParaphrasedMsg, UnsuccessfullyParaphrasedMsg
 
 
 class PassCommand:
@@ -71,7 +71,7 @@ class CommandState:
             return self.commands[name]
         else:
             self.logger.error("Could not find command {}".format(name))
-            return "Command not found"
+            return TaskNotFound()
 
     def getLocation(self, name):
         if name in self.locations:
@@ -96,9 +96,11 @@ class CommandState:
 
 
 class Paraphraser:
-    def __init__(self, url):
+    def __init__(self, url, task_parser):
         self.url = url
         self.headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        self.task_parser = task_parser
+        self.logger = logging.getLogger(__name__)
         try:
             print(requests.post(url + "/start_test_env"))
         except requests.exceptions.RequestException as e:  # This is the correct syntax
@@ -106,10 +108,10 @@ class Paraphraser:
 
     def paraphraseCommand(self, phrase):
         if isinstance(phrase, AlexaAdjustCourse):
-            return AdjustBy(MoveBy(phrase.direction, phrase.meters))
+            return AdjustBy(MoveBy(phrase.direction, phrase.meters)), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaRecognizeObject):
-            return Recognize(phrase.object_name)
+            return Recognize(phrase.object_name), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaExecute):
             try:
@@ -117,8 +119,14 @@ class Paraphraser:
                                           data=json.dumps({'data': phrase.task_list}),
                                           headers=self.headers).text
             except requests.exceptions.RequestException as e:  # This is the correct syntax
+                self.logger.error("Unable to read from server")
                 task_list = phrase.task_list
-            return Execute(task_list)
+
+            parsed_list = self.task_parser.parse(task_list)
+            if parsed_list is None:
+                return Execute([]), UnableToParseTaskListMsg(task_list)
+
+            return Execute(task_list), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaRecordCommand):
             try:
@@ -126,26 +134,32 @@ class Paraphraser:
                                           data=json.dumps({'data': phrase.task_list}),
                                           headers=self.headers).text
             except requests.exceptions.RequestException as e:  # This is the correct syntax
+                self.logger.error("Unable to read from server")
                 task_list = phrase.task_list
-            return Record(task_list, phrase.command_id)
+
+            parsed_list = self.task_parser.parse(task_list)
+            if parsed_list is None:
+                return Record([], phrase.command_id), UnableToParseTaskListMsg(task_list)
+
+            return Record(task_list, phrase.command_id), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaReturnCommand):
-            return ReturnCommand(phrase.command_id)
+            return ReturnCommand(phrase.command_id), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaDefinePose):
-            return DefinePose(phrase.pose)
+            return DefinePose(phrase.pose), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaSwitchRobot):
-            return SwitchRobot(phrase.robot)
+            return SwitchRobot(phrase.robot), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaPause):
-            return Pause()
+            return Pause(), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaStop):
-            return Stop()
+            return Stop(), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaQuit):
-            return Quit()
+            return Quit(), SuccessfullyParaphrasedMsg()
 
         return phrase
 
@@ -167,14 +181,13 @@ class Paraphraser:
 
 
 class CommandParserClient:
-    def __init__(self, command_passer, robot_interface, command_state, paraphrase_detector, task_parser):
+    def __init__(self, command_passer, robot_interface, command_state, paraphrase_detector):
         self.robotInterface = robot_interface
         assert(isinstance(self.robotInterface, GenericInterface))
 
         self.commandPasser = command_passer
         self.commandState = command_state
         self.paraphraseDetector = paraphrase_detector
-        self.taskParser = task_parser
         self.logger = logging.getLogger(__name__)
 
     def interpretTask(self, task):
@@ -222,11 +235,7 @@ class CommandParserClient:
             self.interpretTaskList(task_list)
 
     def interpretTaskList(self, task_list):
-        parsed_list = self.taskParser.parse(task_list)
-        if parsed_list is None:
-            return UnableToParseTaskListMsg(task_list)
-
-        for task in parsed_list:
+        for task in task_list:
             self.interpretTask(task)
 
         return SuccessfullyExecutedTaskListMsg()
@@ -240,8 +249,13 @@ class CommandParserClient:
             return
 
         self.logger.info("Received command {}".format(command))
-        command = self.paraphraseDetector.paraphraseCommand(command)
+        command, success = self.paraphraseDetector.paraphraseCommand(command)
         self.logger.info("Paraphrased command {}".format(command))
+
+        if isinstance(success, UnableToParseTaskListMsg):
+            self.logger.error("Unable to parse command: {}".format(success))
+            self.commandPasser.write(success)
+            return
 
         if isinstance(command, Recognize):
             self.robotInterface.recognize_object()
@@ -256,7 +270,7 @@ class CommandParserClient:
             print(result)
 
         elif isinstance(command, Record):
-            self.commandState.addCommand(command.command_id, self.taskParser.parse(command.task_list))
+            self.commandState.addCommand(command.command_id, command.task_list)
             self.paraphraseDetector.add_task(command.command_id)
             self.commandPasser.write(RecordedCommandSuccessfullyMsg(command.command_id))
 
@@ -297,13 +311,12 @@ if __name__ == '__main__':
     command_passer = PassCommand("out.txt", "in.txt")
     robot_interface = GenericInterface()
     command_state = CommandState()
-    paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:80')
+    paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:80', task_parser)
 
     command_parser = CommandParserClient(command_passer=command_passer,
                                          robot_interface=robot_interface,
                                          command_state=command_state,
-                                         paraphrase_detector=paraphrase_detector,
-                                         task_parser=task_parser)
+                                         paraphrase_detector=paraphrase_detector)
 
     while True:
         command_parser.interpretCommand()

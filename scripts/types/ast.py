@@ -288,3 +288,10 @@ class RecordedTask(Task):
 
     def pretty_print(self):
         return self.task_name
+
+class TaskNotFound(Task):
+    def __str__(self):
+        return "Task not found"
+
+    def pretty_print(self):
+        return "task not found"

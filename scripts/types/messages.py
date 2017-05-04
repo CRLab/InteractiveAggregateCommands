@@ -71,3 +71,13 @@ class QuittingMsg(object):
     def __str__(self):
         return "Now quitting program"
 
+class SuccessfullyParaphrasedMsg(object):
+    def __str__(self):
+        return "Successfully paraphrased message"
+
+class UnsuccessfullyParaphrasedMsg(object):
+    def __init__(self, task_list):
+        self.task_list = task_list
+
+    def __str__(self):
+        return "Unsuccessfully paraphrased task_list {}".format(self.task_list)
