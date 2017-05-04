@@ -18,8 +18,7 @@ class FetchInterface(GenericInterface):
 
         self.name = "Fetch"
 
-    def grasp(self):
-        self.graspPublisher.publish()
+    def grasp(self): self.graspPublisher.publish()
 
     def place(self):
         self.placePublisher.publish()
@@ -34,4 +33,5 @@ class FetchInterface(GenericInterface):
         self.playBackPublisher.publish()
 
     def recognize_object(self):
-        self.runRecognitionPublisher.publish()
+        # self.runRecognitionPublisher.publish()
+        pass

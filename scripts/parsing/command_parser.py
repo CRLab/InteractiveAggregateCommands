@@ -404,4 +404,4 @@ def p_top_level(p):
 # Build the parser
 lexer_instance = Lexer()
 lexer_instance.build()  # Build the lexer
-command_parser = yacc.yacc(start='start', lexer=lexer_instance.lexer)
+command_parser = yacc.yacc(start='start')
