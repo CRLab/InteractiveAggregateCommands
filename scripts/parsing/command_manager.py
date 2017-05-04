@@ -121,16 +121,20 @@ class Paraphraser:
         return phrase
 
     def add_task(self, task_name):
-        requests.post(self.url + "/add_task", data=json.dumps({'data': task_name}))
+        #requests.post(self.url + "/add_task", data=json.dumps({'data': task_name}))
+        pass
 
     def add_location(self, location_name):
-        requests.post(self.url + "/add_location", data=json.dumps({'data': location_name}))
+        #requests.post(self.url + "/add_location", data=json.dumps({'data': location_name}))
+        pass
 
     def add_pose(self, pose_name):
-        requests.post(self.url + "/add_pose", data=json.dumps({'data': pose_name}))
+        #requests.post(self.url + "/add_pose", data=json.dumps({'data': pose_name}))
+        pass
 
     def add_object(self, object_name):
-        requests.post(self.url + "/add_object", data=json.dumps({'data': object_name}))
+        #requests.post(self.url + "/add_object", data=json.dumps({'data': object_name}))
+        pass
 
 
 class CommandParserClient:
