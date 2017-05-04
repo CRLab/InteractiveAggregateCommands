@@ -16,8 +16,13 @@ def transfer_to_ros(msg):
 
 
 def read_from_ros():
-    while not os.path.isfile("in.txt"):
+    time_waited = 0
+    while not os.path.isfile("in.txt") and time_waited < 5:
         time.sleep(0.1)
+        time_waited += 0.1
+
+    if time_waited >= 5:
+        return "Unable to communicate with command parser"
 
     msg = str(pickle.load(open("in.txt", "rb")))
     os.remove("in.txt")
