@@ -42,7 +42,8 @@ class PassCommand:
         pickle.dump(message, open(self.infoOutFilename, "wb"))
 
     def removeMessage(self):
-        os.remove(self.commandsInFilename)
+        if os.path.isfile(self.commandsInFilename):
+            os.remove(self.commandsInFilename)
 
 
 class CommandState:
