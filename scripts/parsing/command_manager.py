@@ -316,7 +316,7 @@ if __name__ == '__main__':
     command_passer = PassCommand("out.txt", "in.txt")
     robot_interface = GenericInterface()
     command_state = CommandState()
-    paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:80', task_parser)
+    paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:5000', task_parser)
 
     command_parser = CommandParserClient(command_passer=command_passer,
                                          robot_interface=robot_interface,
