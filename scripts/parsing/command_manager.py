@@ -217,7 +217,7 @@ class CommandParserClient:
             self.commandPasser.write(SucessfullyWroteObjectMsg(command.as_id))
 
         elif isinstance(command, SwitchRobot):
-            self.commandPasser(NotYetImplementedMsg())
+            self.commandPasser.write(NotYetImplementedMsg())
 
         elif isinstance(command, Execute):
             self.commandPasser.write(ExecutingTasks())
@@ -227,7 +227,7 @@ class CommandParserClient:
         elif isinstance(command, Record):
             self.commandState.addCommand(command.command_id, self.taskParser.parse(command.task_list))
             self.paraphraseDetector.add_task(command.command_id)
-            self.commandPasser(RecordedCommandSuccessfullyMsg(command.command_id))
+            self.commandPasser.write(RecordedCommandSuccessfullyMsg(command.command_id))
 
         elif isinstance(command, DefineLocation):
             currentLocation = self.robotInterface.getCurrentLocation()
@@ -250,10 +250,10 @@ class CommandParserClient:
             self.commandPasser.write(DefinePoseSuccessMsg(command.pose_name))
 
         elif isinstance(command, Pause):
-            self.commandPasser(NotYetImplementedMsg())
+            self.commandPasser.write(NotYetImplementedMsg())
 
         elif isinstance(command, Stop):
-            self.commandPasser(NotYetImplementedMsg())
+            self.commandPasser.write(NotYetImplementedMsg())
 
         elif isinstance(command, Quit):
             self.commandPasser.write(QuittingMsg())
