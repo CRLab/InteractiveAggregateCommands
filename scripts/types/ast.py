@@ -45,10 +45,10 @@ class Record(Command):
         self.task_list = task_list
 
     def __str__(self):
-        return "Record:{\nid:" + self.command_id + ",\n" + str(self.task_list) + "}\n"
+        return "Record:{\nid: {},\ntask_list: {}}\n".format(self.command_id, self.task_list)
 
     def pretty_print(self):
-        return "record " + self.task_list.pretty_print() + " as " + self.command_id
+        return "record {} as {}".format(self.command_id, self.task_list.pretty_print())
 
 
 class DefineLocation(Command):
@@ -247,7 +247,7 @@ class MoveHand(Task):
         self.location_name = location_name
 
     def __str__(self):
-        return "MoveHand{ name: \"" + self.location_name + "\"}"
+        return "MoveHand{ name: \"{}\"}".format(self.location_name)
 
     def pretty_print(self):
         return "move hand to " + self.location_name
