@@ -256,7 +256,7 @@ class CommandParserClient:
 
         elif isinstance(command, ReturnCommand):
             task = self.commandState.getCommand(command.task_name)
-            self.commandPasser.write(ReturnCommandMsg(command.task_name, task))
+            self.commandPasser.write(ReturnCommandMsg(command.task_name, task.pretty_print()))
 
         elif isinstance(command, AdjustBy):
             result = self.robotInterface.cartesianTransform(command.pose_task.direction, command.pose_task.meters)
