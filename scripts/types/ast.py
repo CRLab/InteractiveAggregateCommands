@@ -17,6 +17,22 @@ class Recognize(Command):
         return "recognize object as " + self.as_id
 
 
+class Playback(Command):
+    def __str__(self):
+        return "Playback {}"
+
+    def pretty_print(self):
+        return "play back"
+
+
+class RecordTrajectory(Command):
+    def __str__(self):
+        return "RecordTrajectory {}"
+
+    def pretty_print(self):
+        return "record trajectory"
+
+
 class SwitchRobot(Command):
     def __init__(self, robot_name):
         self.robot_name = robot_name
@@ -288,6 +304,7 @@ class RecordedTask(Task):
 
     def pretty_print(self):
         return self.task_name
+
 
 class TaskNotFound(Task):
     def __str__(self):

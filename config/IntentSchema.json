@@ -13,12 +13,12 @@
         },
         {
           "name": "Integer",
-          "type": "AMAZON.NUMBER",
+          "type": "NUMBER",
           "samples": []
         },
         {
           "name": "Decimal",
-          "type": "AMAZON.NUMBER",
+          "type": "NUMBER",
           "samples": []
         }
       ]
@@ -51,7 +51,8 @@
     {
       "name": "ExecuteIntent",
       "samples": [
-        "execute {TaskList}"
+        "execute {TaskList}",
+        "execute command {TaskList}"
       ],
       "slots": [
         {
@@ -66,6 +67,11 @@
       "samples": [
         "pause"
       ],
+      "slots": []
+    },
+    {
+      "name": "PlaybackIntent",
+      "samples": [],
       "slots": []
     },
     {
@@ -91,7 +97,8 @@
     {
       "name": "RecordCommandIntent",
       "samples": [
-        "record {TaskList} as {CommandId}"
+        "record {TaskList} as {CommandId}",
+        "record command {TaskList} as {CommandId}"
       ],
       "slots": [
         {
@@ -107,9 +114,15 @@
       ]
     },
     {
+      "name": "RecordTrajectoryIntent",
+      "samples": [],
+      "slots": []
+    },
+    {
       "name": "ReturnCommandIntent",
       "samples": [
-        "what is command {CommandId}"
+        "what is command {CommandId}",
+        "what is {CommandId}"
       ],
       "slots": [
         {

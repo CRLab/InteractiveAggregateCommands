@@ -8,6 +8,8 @@ import os
 import time
 import logging
 
+from scripts.types.messages import AlexaPlayback, AlexaRecordTrajectory
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -106,6 +108,28 @@ def define_pose(pose):
 def switch_robot(robot):
     msg = AlexaSwitchRobot(robot)
     logger.info("SwitchRobotIntent: " + str(msg))
+
+    transfer_to_ros(msg)
+    response = read_from_ros()
+
+    return statement(response)
+
+
+@ask.intent('PlaybackIntent')
+def playback():
+    msg = AlexaPlayback()
+    logger.info("PlaybackIntent: " + str(msg))
+
+    transfer_to_ros(msg)
+    response = read_from_ros()
+
+    return statement(response)
+
+
+@ask.intent('RecordTrajectoryIntent')
+def record_trajectory():
+    msg = AlexaRecordTrajectory()
+    logger.info("RecordTrajectoryIntent: " + str(msg))
 
     transfer_to_ros(msg)
     response = read_from_ros()

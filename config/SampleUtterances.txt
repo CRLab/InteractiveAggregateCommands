@@ -8,6 +8,13 @@ ReturnCommandIntent what is {CommandId}
 AdjustCourseIntent adjust course by moving {Direction} by {Integer} point {Decimal} meters
 DefinePoseIntent you are in pose {Pose}
 SwitchRobotIntent switch to robot {Robot}
+
+PlaybackIntent play back
+PlaybackIntent play back trajectory
+
+RecordTrajectoryIntent record trajectory
+RecordTrajectoryIntent record arm passage
+
 PauseIntent pause
 StopIntent stop
 QuitIntent quit

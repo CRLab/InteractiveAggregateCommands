@@ -14,10 +14,11 @@ from scripts.types.alexa_phrases import AlexaAdjustCourse, AlexaRecognizeObject,
     AlexaReturnCommand, AlexaDefinePose, AlexaSwitchRobot, AlexaPause, AlexaStop, AlexaQuit
 from scripts.types.ast import Recognize, SwitchRobot, Execute, DefineLocation, AdjustBy, DefinePose, Pause, Stop, Quit, \
     ReturnCommand, MoveBy, Record, GoTo, FollowMe, GraspObject, PlaceObject, AskForObject, EnactPose, MoveHand, \
-    RecordedTask, TaskNotFound
+    RecordedTask, TaskNotFound, RecordTrajectory, Playback
 from scripts.types.messages import SucessfullyWroteObjectMsg, SuccessfullyExecutedTaskListMsg, UnableToParseTaskListMsg, \
     NotYetImplementedMsg, ExecutingTasks, RecordedCommandSuccessfullyMsg, DefineLocationSuccessMsg, ReturnCommandMsg, \
-    AdjustByResultMsg, DefinePoseSuccessMsg, QuittingMsg, SuccessfullyParaphrasedMsg, UnsuccessfullyParaphrasedMsg
+    AdjustByResultMsg, DefinePoseSuccessMsg, QuittingMsg, SuccessfullyParaphrasedMsg, UnsuccessfullyParaphrasedMsg, \
+    AlexaRecordTrajectory, AlexaPlayback, RecordTrajectorySuccessMsg, PlaybackSuccessMsg
 
 
 class PassCommand:
@@ -153,6 +154,12 @@ class Paraphraser:
 
         elif isinstance(phrase, AlexaSwitchRobot):
             return SwitchRobot(phrase.robot), SuccessfullyParaphrasedMsg()
+
+        elif isinstance(phrase, AlexaPlayback):
+            return Playback(), SuccessfullyParaphrasedMsg()
+
+        elif isinstance(phrase, AlexaRecordTrajectory):
+            return RecordTrajectory(), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaPause):
             return Pause(), SuccessfullyParaphrasedMsg()
@@ -298,6 +305,14 @@ class CommandParserClient:
             self.commandState.addPose(command.pose_name, currentPose)
             self.paraphraseDetector.add_pose(command.pose_name)
             self.commandPasser.write(DefinePoseSuccessMsg(command.pose_name))
+
+        elif isinstance(command, Playback):
+            self.commandPasser.write(PlaybackSuccessMsg())
+            self.robotInterface.playback()
+
+        elif isinstance(command, RecordTrajectory):
+            self.commandPasser.write(RecordTrajectorySuccessMsg())
+            self.robotInterface.recordTrajectory()
 
         elif isinstance(command, Pause):
             self.commandPasser.write(NotYetImplementedMsg())
