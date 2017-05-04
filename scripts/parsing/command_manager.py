@@ -230,7 +230,6 @@ if __name__ == '__main__':
     robot_interface = GenericInterface()
     command_state = CommandState()
     paraphrase_detector = Paraphraser('localhost:8080')
-    task_parser = task_parser.task_parser()
 
     command_parser = CommandParserClient(command_passer=command_passer,
                                          robot_interface=robot_interface,
