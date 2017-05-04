@@ -45,7 +45,7 @@ class Record(Command):
         self.task_list = task_list
 
     def __str__(self):
-        return "Record:\{\n id: {},\n task_list: {}\}\n".format(self.command_id, self.task_list)
+        return "Record:{\nid:" + str(self.command_id) + ",\n" + str(self.task_list) + "}\n"
 
     def pretty_print(self):
         return "record {} as {}".format(self.command_id, self.task_list.pretty_print())
