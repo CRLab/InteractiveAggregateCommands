@@ -356,7 +356,7 @@ def p_error(p):
 
 
 def p_top_level(p):
-    'start : task_list'
+    'start : task'
     p[0] = p[1]
 
 

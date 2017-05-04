@@ -123,7 +123,7 @@ class Paraphraser:
                 task_list = phrase.task_list
 
             new_list = task_list.split(" and then ")
-            parsed_list = map(self.task_parser.parse, new_list)
+            parsed_list = list(map(self.task_parser.parse, new_list))
             if parsed_list is None:
                 return Execute([]), UnableToParseTaskListMsg(task_list)
 
@@ -139,7 +139,7 @@ class Paraphraser:
                 task_list = phrase.task_list
 
             new_list = task_list.split(" and then ")
-            parsed_list = map(self.task_parser.parse, new_list)
+            parsed_list = list(map(self.task_parser.parse, new_list))
             if parsed_list is None:
                 return Record([], phrase.command_id), UnableToParseTaskListMsg(task_list)
 
