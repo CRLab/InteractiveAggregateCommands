@@ -1,7 +1,10 @@
 RecognizeObjectIntent recognize object as {ObjectName}
 ExecuteIntent execute {TaskList}
+ExecuteIntent execute command {TaskList}
 RecordCommandIntent record {TaskList} as {CommandId}
+RecordCommandIntent record command {TaskList} as {CommandId}
 ReturnCommandIntent what is command {CommandId}
+ReturnCommandIntent what is {CommandId}
 AdjustCourseIntent adjust course by moving {Direction} by {Integer} point {Decimal} meters
 DefinePoseIntent you are in pose {Pose}
 SwitchRobotIntent switch to robot {Robot}

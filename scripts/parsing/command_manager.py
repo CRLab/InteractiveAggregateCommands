@@ -52,6 +52,7 @@ class CommandState:
         self.objects = {}
         self.poses = {}
         self.commands = {}
+        self.logger = logging.getLogger(__name__)
 
     def addCommand(self, name, command):
         self.commands[name] = command
@@ -62,20 +63,36 @@ class CommandState:
     def addPose(self, name, pose):
         self.poses[name] = pose
 
-    def addObject(self, name, object):
-        self.objects[name] = object
+    def addObject(self, name, val):
+        self.objects[name] = val
 
     def getCommand(self, name):
-        return self.commands[name]
+        if name in self.commands:
+            return self.commands[name]
+        else:
+            self.logger.error("Could not find command {}".format(name))
+            return "Command not found"
 
     def getLocation(self, name):
-        return self.locations[name]
+        if name in self.locations:
+            return self.locations[name]
+        else:
+            self.logger.error("Could not find location {}".format(name))
+            return None
 
     def getPose(self, name):
-        return self.poses[name]
+        if name in self.poses:
+            return self.poses[name]
+        else:
+            self.logger.error("Could not find pose {}".format(name))
+            return None
 
     def getObject(self, name):
-        return self.objects[name]
+        if name in self.objects:
+            return self.objects[name]
+        else:
+            self.logger.error("Could not find object {}".format(name))
+            return None
 
 
 class Paraphraser:
@@ -140,6 +157,8 @@ class Paraphraser:
 class CommandParserClient:
     def __init__(self, command_passer, robot_interface, command_state, paraphrase_detector, task_parser):
         self.robotInterface = robot_interface
+        assert(isinstance(self.robotInterface, GenericInterface))
+
         self.commandPasser = command_passer
         self.commandState = command_state
         self.paraphraseDetector = paraphrase_detector
