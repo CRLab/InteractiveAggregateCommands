@@ -126,7 +126,7 @@ class Paraphraser:
             if parsed_list is None:
                 return Execute([]), UnableToParseTaskListMsg(task_list)
 
-            return Execute(task_list), SuccessfullyParaphrasedMsg()
+            return Execute(parsed_list), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaRecordCommand):
             try:
@@ -141,7 +141,7 @@ class Paraphraser:
             if parsed_list is None:
                 return Record([], phrase.command_id), UnableToParseTaskListMsg(task_list)
 
-            return Record(task_list, phrase.command_id), SuccessfullyParaphrasedMsg()
+            return Record(parsed_list, phrase.command_id), SuccessfullyParaphrasedMsg()
 
         elif isinstance(phrase, AlexaReturnCommand):
             return ReturnCommand(phrase.command_id), SuccessfullyParaphrasedMsg()
@@ -232,6 +232,9 @@ class CommandParserClient:
         elif isinstance(task, RecordedTask):
             self.logger.info("Handling task as RecordedTask")
             task_list = self.commandState.getCommand(task.task_name)
+            if isinstance(task_list, TaskNotFound):
+                self.logger.error("Could not find command {}".format(task.task_name))
+                return
             self.interpretTaskList(task_list)
 
     def interpretTaskList(self, task_list):
