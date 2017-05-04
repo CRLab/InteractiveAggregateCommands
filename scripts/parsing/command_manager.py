@@ -252,7 +252,7 @@ class CommandParserClient:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
-    command_passer = PassCommand("in.txt", "out.txt")
+    command_passer = PassCommand("out.txt", "in.txt")
     robot_interface = GenericInterface()
     command_state = CommandState()
     paraphrase_detector = Paraphraser('localhost:8080')
