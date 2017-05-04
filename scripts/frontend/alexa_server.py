@@ -12,7 +12,7 @@ ask = Ask(app, '/')
 
 
 def transfer_to_ros(msg):
-    pickle.dump(msg, "out.txt")
+    pickle.dump(msg, open("out.txt", "wb"))
 
 
 def read_from_ros():
@@ -140,4 +140,6 @@ def hello_world():
 
 
 if __name__ == '__main__':
+    import sys
+    print(sys.path)
     app.run(debug=True, host="0.0.0.0", port=8080)
