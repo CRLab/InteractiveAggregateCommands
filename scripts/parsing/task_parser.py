@@ -364,5 +364,4 @@ def p_top_level(p):
 tokens = Lexer.tokens
 lexer_instance = Lexer()
 lexer_instance.build()  # Build the lexer
-print(lexer_instance.test("shaving task and then shaving task"))
 task_parser = yacc.yacc(start='start')

@@ -255,7 +255,7 @@ class CommandParserClient:
 
         self.logger.info("Received command {}".format(command))
         command, success = self.paraphraseDetector.paraphraseCommand(command)
-        self.logger.info("Paraphrased command {}".format(command))
+        self.logger.info("Paraphrased command {}".format(str(command)))
 
         if isinstance(success, UnableToParseTaskListMsg):
             self.logger.error("Unable to parse command: {}".format(success))
