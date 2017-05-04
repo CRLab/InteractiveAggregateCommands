@@ -185,8 +185,8 @@ class Paraphraser:
         pass
 
     def add_object(self, object_name):
-        try:
-            requests.post(self.url + "/add_object_task", data=json.dumps({'data': object_name}))
+        # try:
+        #     requests.post(self.url + "/add_object_task", data=json.dumps({'data': object_name}))
         pass
 
 
