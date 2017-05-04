@@ -33,7 +33,7 @@ def read_from_ros():
     return msg
 
 
-@ask.intent('RecognizeObjectIntent', mapping={'ObjectName': 'object_name'})
+@ask.intent('RecognizeObjectIntent', mapping={'object_name': 'ObjectName'})
 def recognize_object(object_name):
     msg = AlexaRecognizeObject(object_name)
     logger.info("RecognizeObjectIntent: " + str(msg))
@@ -44,7 +44,7 @@ def recognize_object(object_name):
     return statement(response)
 
 
-@ask.intent('ExecuteIntent', mapping={'TaskList': 'task_list'})
+@ask.intent('ExecuteIntent', mapping={'task_list': 'TaskList'})
 def execute(task_list):
     msg = AlexaExecute(task_list)
     logger.info("ExecuteIntent: " + str(msg))
@@ -55,7 +55,7 @@ def execute(task_list):
     return statement(response)
 
 
-@ask.intent('RecordCommandIntent', mapping={'TaskList': 'task_list', 'CommandId': 'command_id'})
+@ask.intent('RecordCommandIntent', mapping={'task_list': 'TaskList', 'command_id': 'CommandId'})
 def record_command(task_list, command_id):
     msg = AlexaRecordCommand(task_list, command_id)
     logger.info("RecordCommandIntent: " + str(msg))
@@ -66,7 +66,7 @@ def record_command(task_list, command_id):
     return statement(response)
 
 
-@ask.intent('ReturnCommandIntent', mapping={'CommandId': 'command_id'})
+@ask.intent('ReturnCommandIntent', mapping={'command_id': 'CommandId'})
 def return_command(command_id):
     msg = AlexaReturnCommand(command_id)
     logger.info("ReturnCommandIntent: " + str(msg))
@@ -77,7 +77,7 @@ def return_command(command_id):
     return statement(response)
 
 
-@ask.intent('AdjustCourseIntent', mapping={'Direction': 'direction', 'Integer': 'integer', 'Decimal': 'decimal'})
+@ask.intent('AdjustCourseIntent', mapping={'direction': 'Direction', 'integer': 'Integer', 'decimal': 'Decimal'})
 def adjust_course(direction, integer, decimal):
     meters = float(integer + "." + decimal)
     direction = Direction(direction)
@@ -91,7 +91,7 @@ def adjust_course(direction, integer, decimal):
     return statement(response)
 
 
-@ask.intent('DefinePoseIntent', mapping={'Pose': 'pose'})
+@ask.intent('DefinePoseIntent', mapping={'pose': 'Pose'})
 def define_pose(pose):
     msg = AlexaDefinePose(pose)
     logger.info("DefinePoseIntent: " + str(msg))
@@ -102,7 +102,7 @@ def define_pose(pose):
     return statement(response)
 
 
-@ask.intent('SwitchRobotIntent', mapping={'Robot': 'robot'})
+@ask.intent('SwitchRobotIntent', mapping={'robot': 'Robot'})
 def switch_robot(robot):
     msg = AlexaSwitchRobot(robot)
     logger.info("SwitchRobotIntent: " + str(msg))
