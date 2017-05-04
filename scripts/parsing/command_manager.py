@@ -7,7 +7,7 @@ import requests
 import json
 import logging
 
-from scripts.interfaces.fetch_interface import FetchInterface, GenericInterface
+from scripts.interfaces.fetch_new_interface import FetchInterface, GenericInterface
 from scripts.parsing.task_parser import task_parser
 
 from scripts.types.alexa_phrases import AlexaAdjustCourse, AlexaRecognizeObject, AlexaExecute, AlexaRecordCommand, \
@@ -185,13 +185,14 @@ class Paraphraser:
         pass
 
     def add_object(self, object_name):
-        #requests.post(self.url + "/add_object", data=json.dumps({'data': object_name}))
+        try:
+            requests.post(self.url + "/add_object_task", data=json.dumps({'data': object_name}))
         pass
 
 
 class CommandParserClient:
-    def __init__(self, command_passer, robot_interface, command_state, paraphrase_detector):
-        self.robotInterface = robot_interface
+    def __init__(self, command_passer, command_state, paraphrase_detector):
+        self.robotInterface = FetchInterface()
         assert(isinstance(self.robotInterface, GenericInterface))
 
         self.commandPasser = command_passer
@@ -204,7 +205,7 @@ class CommandParserClient:
         if isinstance(task, GoTo):
             self.logger.info("Handling task as GoTo")
             location = self.commandState.getLocation(task.location_name)
-            result = self.robotInterface.moveTo(location)
+            result = self.robotInterface.navigate(location)
             print(result)
             return result
 
@@ -216,23 +217,23 @@ class CommandParserClient:
 
         elif isinstance(task, FollowMe):
             self.logger.info("Handling task as FollowMe")
-            self.robotInterface.followMe()
+            # self.robotInterface.followMe()
 
         elif isinstance(task, GraspObject):
             self.logger.info("Handling task as GraspObject")
-            self.robotInterface.graspObject(self.commandState.getObject(task.object_name))
+            self.robotInterface.grasp()
 
         elif isinstance(task, PlaceObject):
             self.logger.info("Handling task as PlaceObject")
-            self.robotInterface.placeObject(self.commandState.getObject(task.object_name))
+            self.robotInterface.place()
 
         elif isinstance(task, AskForObject):
             self.logger.info("Handling task as AskForObject")
-            self.robotInterface.askForObject()
+            # self.robotInterface.askForObject()
 
         elif isinstance(task, EnactPose):
             self.logger.info("Handling task as EnactPose")
-            self.robotInterface.enactPose(self.commandState.getPose(task.pose_name))
+            self.robotInterface.move_arm_to_pose(self.commandState.getPose(task.pose_name))
 
         elif isinstance(task, MoveHand):
             self.logger.info("Handling task as MoveHand")
@@ -329,12 +330,10 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     command_passer = PassCommand("out.txt", "in.txt")
-    robot_interface = GenericInterface()
     command_state = CommandState()
     paraphrase_detector = Paraphraser('http://long.cs.columbia.edu:5000', task_parser)
 
     command_parser = CommandParserClient(command_passer=command_passer,
-                                         robot_interface=robot_interface,
                                          command_state=command_state,
                                          paraphrase_detector=paraphrase_detector)
 
