@@ -68,6 +68,8 @@ class Lexer(object):
         'ROBOT',
         'QUIT',
         'NAMED',
+        'PUT',
+        'PICK',
     )
 
     # Definitions of tokens go in functions to increase precidence
@@ -194,6 +196,12 @@ class Lexer(object):
     def t_NAMED(self, t):
         r'named'; return t
 
+    def t_PUT(self, t):
+        r'put'; return t
+        
+    def t_PICK(self, t):
+        r'pick'; return t
+
     def t_ID(self, t):
         r"""[a-zA-Z][a-zA-Z\s]*[a-zA-Z]"""
         return t
@@ -304,10 +312,17 @@ def p_task_grasp_object(p):
     'task : GRASP OBJECT ID'
     p[0] = GraspObject(p[3])
 
+def p_task_pick_up_object(p):
+    'task : PICK UP OBJECT ID'
+    p[0] = GraspObject(p[4])
 
 def p_task_place_object(p):
     'task : PLACE OBJECT ID'
     p[0] = PlaceObject(p[3])
+
+def p_task_put_down_object(p):
+    'task : PUT DOWN OBJECT ID'
+    p[0] = PlaceObject(p[4])
 
 
 def p_task_grasp_object2(p):

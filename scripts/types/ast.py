@@ -279,6 +279,9 @@ class TaskList:
         self.tasks.append(task)
         return self
 
+    def append(self, task):
+        self.tasks.append(task)
+
     def __str__(self):
         output = "tasks:[\n"
         for task in self.tasks:
