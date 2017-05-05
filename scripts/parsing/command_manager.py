@@ -7,6 +7,8 @@ import requests
 import json
 import logging
 
+from scripts.interfaces.fetch_new_interface import FetchInterface
+
 from scripts.parsing.task_parser import task_parser
 
 from scripts.types.alexa_phrases import AlexaAdjustCourse, AlexaRecognizeObject, AlexaExecute, AlexaRecordCommand, \
@@ -199,6 +201,7 @@ class Paraphraser:
 
 class CommandParserClient:
     def __init__(self, command_passer, command_state, paraphrase_detector):
+        self.robotInterface = FetchInterface()
         self.commandPasser = command_passer
         self.commandState = command_state
         self.paraphraseDetector = paraphrase_detector
@@ -221,23 +224,23 @@ class CommandParserClient:
 
         elif isinstance(task, FollowMe):
             self.logger.info("Handling task as FollowMe")
-            # self.robotInterface.followMe()
+            self.robotInterface.followMe()
 
         elif isinstance(task, GraspObject):
             self.logger.info("Handling task as GraspObject")
-            # self.robotInterface.grasp()
+            self.robotInterface.grasp()
 
         elif isinstance(task, PlaceObject):
             self.logger.info("Handling task as PlaceObject")
-            # self.robotInterface.place()
+            self.robotInterface.place()
 
         elif isinstance(task, AskForObject):
             self.logger.info("Handling task as AskForObject")
-            # self.robotInterface.askForObject()
+            self.robotInterface.askForObject()
 
         elif isinstance(task, EnactPose):
             self.logger.info("Handling task as EnactPose")
-            # self.robotInterface.move_arm_to_pose(self.commandState.getPose(task.pose_name))
+            self.robotInterface.move_arm_to_pose(self.commandState.getPose(task.pose_name))
 
         elif isinstance(task, MoveHand):
             self.logger.info("Handling task as MoveHand")
@@ -275,7 +278,7 @@ class CommandParserClient:
             return
 
         if isinstance(command, Recognize):
-            # self.robotInterface.recognize_object()
+            self.robotInterface.recognize_object()
             self.commandPasser.write(SucessfullyWroteObjectMsg(command.as_id))
 
         elif isinstance(command, SwitchRobot):
@@ -313,11 +316,11 @@ class CommandParserClient:
 
         elif isinstance(command, Playback):
             self.commandPasser.write(PlaybackSuccessMsg())
-            # self.robotInterface.playback()
+            self.robotInterface.playback()
 
         elif isinstance(command, RecordTrajectory):
             self.commandPasser.write(RecordTrajectorySuccessMsg())
-            # self.robotInterface.recordTrajectory()
+            self.robotInterface.recordTrajectory()
 
         elif isinstance(command, Pause):
             self.commandPasser.write(NotYetImplementedMsg())
